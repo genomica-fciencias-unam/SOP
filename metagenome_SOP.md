@@ -1,6 +1,6 @@
 
 #Standard operative procedures for WGS metagenomics @ LDA lab
-lalcaraz@iecologia.unam.mx
+lalcaraz@ciencias.unam.mx
 
 
 ##Assembly and QC
