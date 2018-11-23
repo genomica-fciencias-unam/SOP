@@ -1,7 +1,4 @@
-
-##Protocolo limpieza y procesado inicial de amplicones
-   
-
+#Protocolo limpieza y procesado inicial de amplicones
 #Visualizar la calidad de las secuencias y armar una tabla con la siguiente información:
 
        Cantidad de READS | Longitud promedio reads | Secuencias Ensambladas
