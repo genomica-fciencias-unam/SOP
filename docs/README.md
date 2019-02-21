@@ -1,5 +1,5 @@
 ---
 layout: default
 ---
-#Hola
+# Hola
 ## sí funciona!
