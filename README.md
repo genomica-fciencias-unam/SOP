@@ -1,3 +1,5 @@
-# SOP
+# Protocolos estandarizados de operación (SOP)
 
-The goal is to have the Standard Operative Procedures for bioinformatic analysis in the environmental genomics laboratory. 
+El objetivo es tener un repositorio de scripts y procedimientos estandarizados para los análisis rutinarios y mínimos del laboratorio. 
+
+
