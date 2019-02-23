@@ -4,7 +4,7 @@ title: SOP Genómica Ambiental
 ---
 
 ## [Etiquetas para muestras e identificadores](/SOP/etiquetas.html)
-## Información mínima de metadatos de proyectos de secuenciación
+## [Información mínima de metadatos de proyectos de secuenciación](/SOP/metadatos.html)
 ## Documentación y bitácora del proyecto
 ## Procesamiento de Amplicones
 
