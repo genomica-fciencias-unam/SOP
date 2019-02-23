@@ -14,11 +14,11 @@ Analizar la calidad de las secuencias y calcular las estadísticas de secuenciac
 
 Guardar los datos del % de lecturas ensambladas, ejemplo:
 
-Merging Result Statistics
-     -  Total number of reads     :      78186
-     -  Number of merged reads    :      58986 (75.44%)
-     -  Number of unmerged reads  :      19200 (24.56%)
-     -  TIME for total processing :      3.247 sec
+
+  -  Total number of reads     :      78186
+  -  Number of merged reads    :      58986 (75.44%)
+  -  Number of unmerged reads  :      19200 (24.56%)
+  -  TIME for total processing :      3.247 sec
 
 Armar un archivo tabular con la siguiente información:
 
