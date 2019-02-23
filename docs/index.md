@@ -3,7 +3,7 @@ layout: default
 title: SOP Genómica Ambiental
 ---
 
-## [Etiquetas para muestras e identificadores](/SOP/etiquetas.md)
+## [Etiquetas para muestras e identificadores](/SOP/etiquetas.html)
 ## Información mínima de metadatos de proyectos de secuenciación
 ## Documentación y bitácora del proyecto
 ## Procesamiento de Amplicones
