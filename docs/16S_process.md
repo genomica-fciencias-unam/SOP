@@ -45,13 +45,14 @@ for N in `ls *.scr`; do qsub $N; done # se mandan al cluster los trabajos de ens
 
 ## Renombrar las secuencias a identificadores sencillos (ver sección de etiquetas)
 renombrar las secuencias con identificadores con el nombre de la secuencia y numerarlas:
+```
 >Secuencia_0 
 ATTAC
 >Secuencia_1
 TTCAT
 >Secuencia_2
 CCTAT
-
+```
 
 ```bash
 #Hacer este paso por cada muestra. Esto sirve para tener etiquetas individuales por muestra
