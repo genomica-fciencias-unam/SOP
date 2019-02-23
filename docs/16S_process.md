@@ -4,55 +4,13 @@
 
 ### Visualizar la calidad de las secuencias y armar una tabla con la siguiente información:
 
-Usar FastQC (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) Almacenar los plots en html en el directorio QC/ 
+Usar [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) Almacenar los plots en html en el directorio QC/ 
 
 Analizar la calidad de las secuencias y calcular las estadísticas de secuenciación crudas, generalmente viene en los reportes de Cuernavaca, Irapuato y Korea, aquí pueden reconfirmar. 
 
 
 ## Ensamble por CASPER **usar por defecto
 
-El ensamble de CASPER tiene los siguientes parámetros
- -t  <int>   The number of threads for parallel proessing
-                 (default=N up to maximum number of system limit)
-
-     -k  <int>   The size of k-mers used to represent contexts around
-                 mismatching bases.                   (default=17)
-
-     -d  <int>   Threshold for difference of quality-scores
-                 Context-based mismatch resolution starts if quality scores
-                 differ less than 'd'.
-                 Smaller value indicates more trust to quality scores than k-mer context.
-                 (default=19)
-
-     -g  <float> Threshold for mismatch ratio of best overlap region
-                 CASPER gives up merging if the mismatch ratio in the overlap
-                 is greater than 'g' and leaves the two reads unmerged.
-                 If all the reads have overlap then set 'g' as default or higher.
-                 Or if you want sensitive for not merging(TN) then set 'g' as 
-                 lower than default. (0.27 or lower is recommended)
-                 (default=0.5)
-
-     -w  <int>   The minimum length (in bp) of the overlap between forward
-                 and reverse reads.               (default=10bp)
-
-     -o  <str>   Prefix of output          (default=casper)
-                 By default, 'casper.fastq'  merged output is generated.
-
-     -j          Internal naive k-mer counting method is used instead of Jellyfish.
-                 By default (without this option), Jellyfish (for k-mer counting)
-                 is used to speed up.
-
-     -l          CASPER can generate the unmerged output file.
-                 prefix_for_left.fastq, prefix_rev_left.fastq for forward, reverse 
-                 individually.
-
-     -h          Help for usage information
-
-     -v          Version information
-
-      *          CASPER do not need PHRED offset. Either PHRED+64 or PHRED+33 is OK.
-                 Only the difference between two quality scores instead of absolute
-                 value is used.
 
 Guardar los datos del % de lecturas ensambladas, ejemplo:
 
