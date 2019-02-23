@@ -33,7 +33,7 @@ bash assemblyPANDA.sh NOMBRE_TRABAJO #se corre el script que genera los trabajos
 for N in `ls *.scr`; do qsub $N; done # se mandan al cluster los trabajos de ensamblado
 ```
 
-### También se puede experimentar con PANDASEQ, hay que hacer cortado manual de las bases dependiendo de la calidad, este protocolo fue útil con MiSEQ con un 2x250 
+## También se puede experimentar con PANDASEQ, hay que hacer cortado manual de las bases dependiendo de la calidad, este protocolo fue útil con MiSEQ con un 2x250 
 
 ```bash
 #para ensamblar con PANDASEQ
