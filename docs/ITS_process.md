@@ -95,7 +95,7 @@ pick_rep_set.py -i estudio.otu -f estudio_completo.fas -o rep_set.fna
 
 Primero hacer un blast contra una DB pequeña de ITS (OTUs 70% id)
 Identificar los OTUs que dieron aciertos
-<<<<<<< HEAD
+
 Generar un archivo de trabajo libre de secuencias que no sean ITS
 
 
@@ -110,34 +110,30 @@ cat noITS_screen/noITS_screen_repset_tax_assignments.txt | grep "No blast hit" |
 
 
 perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' ids_screened.txt rep_set.fna >rep_set.screened.fna #extrae las secuencias con match a ITS y hace un nuevo archivo representativo
+```
 
 
-#asignación taxonómica del ITS del dataset completo al 97%
-=======
-Generar un archivo de trabajo libre de secuencias que no sean 16S
+
+Generar un archivo de trabajo libre de secuencias que no sean ITS
 
 
 ```bash
-parallel_assign_taxonomy_blast.py -i rep_set1.fna -o no16S_screen -r /qiime/its_12_11_otus/rep_set/80_otus.fasta -t /qiime/its_12_11_otus/taxonomy/97_otu_taxonomy.txt
 
-cat no16S_screen/no16S_screen_repset_tax_assignments.txt | grep -c "No blast hit"
+parallel_assign_taxonomy_blast.py -i rep_set1.fna -o noITS_screen -r /qiime/its_12_11_otus/rep_set/80_otus.fasta -t /qiime/its_12_11_otus/taxonomy/97_otu_taxonomy.txt
 
-cat no16S_screen/no16S_screen_repset_tax_assignments.txt | grep -v "No blast hit" | cut -f1 >ids_screened.txt
+cat noITS_screen/noITS_screen_repset_tax_assignments.txt | grep -c "No blast hit"
 
-cat no16S_screen/no16S_screen_repset_tax_assignments.txt | grep "No blast hit" | cut -f1 >ids_REMOVE_biom.txt
+cat noITS_screen/noITS_screen_repset_tax_assignments.txt | grep -v "No blast hit" | cut -f1 >ids_screened.txt
 
-
-perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' ids_screened.txt rep_set.fna >rep_set.screened.fna #extrae las secuencias con match a 16S y hace un nuevo archivo representativo
+cat noITS_screen/noITS_screen_repset_tax_assignments.txt | grep "No blast hit" | cut -f1 >ids_REMOVE_biom.txt
 
 
-#asignación taxonómica del 16S del dataset completo al 97%
->>>>>>> master
-parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/its_12_11_otus/rep_set/80_otus.fasta/97_otus.fasta -t /qiime/its_12_11_otus/taxonomy/97_otu_taxonomy.txt
+perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' ids_screened.txt rep_set.fna >rep_set.screened.fna #extrae las secuencias con match a ITS y hace un nuevo archivo representativo
+```
 
-
-
-
-
+# Asignar taxonomía completa al 97%
+```
+parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/its_12_11_otus/rep_set/97_otus.fasta/97_otus.fasta -t /qiime/its_12_11_otus/taxonomy/97_otu_taxonomy.txt
 ```
 
 ## Armar tabla de OTUs
@@ -146,18 +142,14 @@ parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/
 ```bash
 make_otu_table.py -i estudio.otu -t taxonomy/taxonomy_repset_tax_assignments.txt -o estudio.biom 
 
-<<<<<<< HEAD
 #Quitar los OTUs sin hits de ITS y singletons
-=======
-#Quitar los OTUs sin hits de 16S y singletons
->>>>>>> master
-filter_otus_from_otu_table.py -i estudio.biom -e ids_REMOVE_biom.txt -o estudio_screened.biom -n2 ; mv estudio_screened.biom estudio.biom
 
+filter_otus_from_otu_table.py -i estudio.biom -e ids_REMOVE_biom.txt -o estudio_screened.biom -n2 ; mv estudio_screened.biom estudio.biom
+```
 
 
 
 #generar biom tabular
+```
 biom convert --to-tsv -i estudio.biom -o estudio.biom.tsv --table-type "Taxon table" --header-key=taxonomy
-
-
 ```
