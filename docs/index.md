@@ -14,11 +14,11 @@ title: SOP Genómica Ambiental
 
 
 ## Metagenomas
-- Procesamiento
+- [Procesamiento](/SOP/genoma.html)
 - Análisis en R
 
 ## Genomas
-- Procesamiento
+- [Procesamiento](/SOP/genoma.html)
 - Análisis en R
 
 
