@@ -14,7 +14,7 @@ title: SOP Genómica Ambiental
 
 
 ## Metagenomas
-- [Procesamiento](/SOP/genoma.html)
+- [Procesamiento](/SOP/metagenoma.html)
 - Análisis en R
 
 ## Genomas
