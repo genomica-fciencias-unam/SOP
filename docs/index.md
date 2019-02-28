@@ -5,7 +5,7 @@ title: SOP Genómica Ambiental
 
 ## [Etiquetas para muestras e identificadores](/SOP/etiquetas.html)
 ## [Información mínima de metadatos de proyectos de secuenciación](/SOP/metadatos.html)
-## Documentación y bitácora del proyecto
+## [Documentación y bitácora del proyecto](/SOP/bitacora.html)
 ## Procesamiento de Amplicones
 
 - [Procesamiento gen 16S rRNA](/SOP/16S_process.html)
@@ -20,4 +20,6 @@ title: SOP Genómica Ambiental
 ## Genomas
 - Procesamiento
 - Análisis en R
+
+
 ## Protocolos experimentales
