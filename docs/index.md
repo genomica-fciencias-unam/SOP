@@ -9,7 +9,7 @@ title: SOP Genómica Ambiental
 ## Procesamiento de Amplicones
 
 - [Procesamiento gen 16S rRNA](/SOP/16S_process.html)
-- Procesamiento de ITS
+- [Procesamiento de ITS](/SOP/ITS_process.html)
 - Análisis en R
 
 
