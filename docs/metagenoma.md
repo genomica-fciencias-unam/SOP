@@ -5,6 +5,9 @@ Para los metagenomas:
 Los pasos generales son: 
 
 0. Mapeo de secuencias contra el hospedero (Bowtie2)
+```
+comando del mal
+```
 1. Filtrado de calidad (Trimmomatic)
 2. Ensamble (metaSPADES o megaHIT)
 3. Estadísticas de ensamblado
