@@ -64,7 +64,7 @@ cat *.numbered.fasta >estudio_completo.fas
 
 ```
 
-## Agrupamiento de secuencias al 97% de identidad
+## Agrupamiento de secuencias al 97% de identidad al menos
 
 Si estás en el cluster _deep thought_ hay que utilizar el script de paralelización
 
