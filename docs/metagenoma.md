@@ -3,11 +3,12 @@ Para los metagenomas:
 Los pasos generales son: 
 
 0. Mapeo de secuencias contra el hospedero utilizando Bowtie2:
-  a) Se selecciona un genoma de referencia para realizar el filtrado, es necesario formatearlo:
+
+a) Se selecciona un genoma de referencia para realizar el filtrado, es necesario formatearlo:
 ```
 /srv/home/mromero/mbin/bowtie2/bowtie2-build /srv/home/chernandez/processing/paired/GCA_002806865.2_ASM280686v2_genomic.fna calabacitagenome
 ```
-  b) Realizar el alineamiento contra el genoma de referencia.
+b) Realizar el alineamiento contra el genoma de referencia.
 ```
 #!/bin/bash
 #bash nombre_shipt.sh
@@ -23,7 +24,7 @@ echo "#!/bin/bash" >$*.$COUNT.sh
 echo "$BIN/bowtie2 -x calabacitagenome -1 $SEQS/$FAA"_R1.fastq" -2 $SEQS/$FAA"_R2.fastq" -S $FAA.sam"  -p 20 >>$*.$COUNT.scr
 chmod +x *.scr; done
 ```
-  c) Se generan archivos en formato sam que tienen que convertirse a bam para continuar con el procesamiento
+c) Se generan archivos en formato sam que tienen que convertirse a bam para continuar con el procesamiento
 ```
 #!/bin/bash
 #bash nombre_shipt.sh
@@ -39,7 +40,7 @@ echo "#!/bin/bash" >$*.$COUNT.sh
 echo "$BIN/samtools view -bS $FILES/$FAA".sam"  > $FAA.bam"  >>$*.$COUNT.scr
 chmod +x *.scr; done
 ```
-  d) Obtener las secuencias que no mapearon contra el hospedero.
+d) Obtener las secuencias que no mapearon contra el hospedero.
 ```
 #!/bin/bash
 #bash nombre_shipt.sh
@@ -55,7 +56,7 @@ echo "#!/bin/bash" >$*.$COUNT.sh
 echo "$BIN/samtools view -b -f 12 -F 256  $FILES/$FAA".bam"  > $FAA_"um.bam  >>$*.$COUNT.scr
 chmod +x *.scr; done
 ```
-  e) Se orden las secuencias para que los pares (fordward y reverse) aparezcan juntas.
+e) Se orden las secuencias para que los pares (fordward y reverse) aparezcan juntas.
 ```
 #!/bin/bash
 #bash nombre_shipt.sh
@@ -71,7 +72,7 @@ echo "#!/bin/bash" >$*.$COUNT.sh
 echo "$BIN/samtools sort -n  $FILES/$FAA"_um.bam"  > $FAA"_sorted.bam  >>$*.$COUNT.scr
 chmod +x *.scr; done
 ```
-  f) Recuperar las secuencias forward y reverse por separado
+f) Recuperar las secuencias forward y reverse por separado
 ```
 #!/bin/bash
 #bash nombre_shipt.sh
