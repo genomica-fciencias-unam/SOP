@@ -3,6 +3,7 @@ Para los metagenomas:
 Los pasos generales son: 
 
 0. Mapeo de secuencias contra el hospedero utilizando Bowtie2:
+
 a) Se selecciona un genoma de referencia para realizar el filtrado, es necesario formatearlo:
 ```
 /srv/home/mromero/mbin/bowtie2/bowtie2-build /srv/home/chernandez/processing/paired/GCA_002806865.2_ASM280686v2_genomic.fna calabacitagenome
@@ -142,9 +143,64 @@ echo "$BIN/megahit/megahit -m 24000000000 -t 40 -1 $SEQS/$FAA"_paired_R1.fastq" 
 S/$FAA"_paired_R2.fastq" -o $OUT/$FAA.megahit_result" >>$*.$COUNT.scr
 ```
 3. Estadísticas de ensamblado
-4. Mapeo de _reads_ crudos _vs contigs_ 
+
+4. Mapeo de _reads_ crudos _vs contigs_, se utiliza bbmap
+```
+#!/bin/bash
+
+CONT=/home/cristobal/annotation/contigs
+SEQS=/home/cristobal/annotation
+BIN=/home/cristobal/binc/bbmap
+
+COUNT=0
+for FAA in `ls *paired_R1* | sed -e 's/_paired_R1.fastq//g'`
+do
+let COUNT=COUNT+1
+echo "#!/bin/bash" >$*.$COUNT.scr
+echo "#$ -cwd" >>$*.$COUNT.scr
+echo "#$ -j y" >>$*.$COUNT.scr
+echo "#$ -S /bin/bash" >>$*.$COUNT.scr
+echo "$BIN"/bbwrap.sh ref="$CONT/$FAA"_contigs.fa in="$SEQS/
+$FAA"_paired_R1.fastq in2="$SEQS/$FAA"_paired_R2.fastq out="$SEQS/$FAA".sam kfil
+ter=22 subfilter=15 maxindel=80 >> $*.$COUNT.scr
+chmod +x *.scr; done
+```
 5. Obtener _reads_ no mapeados en el ensamblado
+```
+#!/bin/bash
+
+SEQS=/home/cristobal/annotation
+
+COUNT=0
+for FAA in `ls *.sam | sed -e 's/.sam//g'`
+do
+let COUNT=COUNT+1
+echo "#!/bin/bash" >$*.$COUNT.scr
+echo "#$ -cwd" >>$*.$COUNT.scr
+echo "#$ -j y" >>$*.$COUNT.scr
+echo "#$ -S /bin/bash" >>$*.$COUNT.scr
+echo /home/cristobal/binc/samtools-1.2/samtools view -u -f4 "$SEQS/$FAA".sam -o "$SEQS/$FAA"_ump.sam >> $*.$COUNT.scr
+chmod +x *.scr; done
+```
 6. Segundo ensamble de _reads_ no mapeados con _Velvet_ con cobertura 2X
+```
+#!/bin/bash
+
+SEQS=/home/cristobal/contigs
+BIN=/home/cristobal/binc/velvet
+
+COUNT=0
+for FAA in `ls *_ump.fastq.gz | perl -pe 's/\_.*//g' | sort | uniq`
+do
+let COUNT=COUNT+1
+echo "#!/bin/bash" >$*.$COUNT.scr
+echo "#$ -cwd" >>$*.$COUNT.scr
+echo "#$ -j y" >>$*.$COUNT.scr
+echo "#$ -S /bin/bash" >>$*.$COUNT.scr
+echo  "$BIN/velveth $SEQS/$FAA"_assemblyVelvet 21 -fastq -short "$SEQS/$FAA"_all_unpaired.fastq.gz -shortPaired "$SEQS/$FAA"_ump.fastq.gz >>$*.$COUNT.scr
+echo "$BIN/velvetg $SEQS/$FAA"_assemblyVelvet -exp_cov 2 -ins_length 350 -min_contig_lgth 100 >> $*.$COUNT.scr
+chmod +x *.scr; done
+```
 7. Mapeo de _reads_ crudos _vs_ ensamblado con _Velvet_
 8. Descartar contigs de <100 pb; unir el ensamble del paso 2 contra el ensamble de 6
 9. Predicción de ORFs con _Prodigal_
