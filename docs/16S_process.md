@@ -99,13 +99,13 @@ Generar un archivo de trabajo libre de secuencias que no sean 16S
 
 
 ```bash
-parallel_assign_taxonomy_blast.py -i rep_set1.fna -o no16S_screen -r /qiime/gg_otus-13_8-release/rep_set/70_otus.fasta -t /qiime/qiime_software/gg_otus-13_8-release/taxonomy/70_otu_taxonomy.txt
+parallel_assign_taxonomy_blast.py -i rep_set1.fna -o no16S_screen -r /qiime/gg_otus-13_8-release/rep_set/70_otus.fasta -t /qiime/gg_otus-13_8-release/taxonomy/70_otu_taxonomy.txt
 
-cat no16S_screen/no16S_screen_repset_tax_assignments.txt | grep -c "No blast hit"
+cat no16S_screen/repset_tax_assignments.txt | grep -c "No blast hit"
 
-cat no16S_screen/no16S_screen_repset_tax_assignments.txt | grep -v "No blast hit" | cut -f1 >ids_screened.txt
+cat no16S_screen/repset_tax_assignments.txt | grep -v "No blast hit" | cut -f1 >ids_screened.txt
 
-cat no16S_screen/no16S_screen_repset_tax_assignments.txt | grep "No blast hit" | cut -f1 >ids_REMOVE_biom.txt
+cat no16S_screen/repset_tax_assignments.txt | grep "No blast hit" | cut -f1 >ids_REMOVE_biom.txt
 
 
 perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' ids_screened.txt rep_set.fna >rep_set.screened.fna #extrae las secuencias con match a 16S y hace un nuevo archivo representativo
