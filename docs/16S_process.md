@@ -112,7 +112,7 @@ perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' ids_screened
 
 
 #asignación taxonómica del 16S del dataset completo al 97%
-parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/gg_otus-13_8-release/rep_set/97_otus.fasta -t /qiime/qiime_software/gg_otus-13_8-release/taxonomy/97_otu_taxonomy.txt
+parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/gg_otus-13_8-release/rep_set/97_otus.fasta -t /qiime/gg_otus-13_8-release/taxonomy/70_otu_taxonomy.txt
 
 
 
