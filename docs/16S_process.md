@@ -112,7 +112,7 @@ perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' ids_screened
 
 
 #asignación taxonómica del 16S del dataset completo al 97%
-parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/gg_otus-13_8-release/rep_set/97_otus.fasta -t /qiime/gg_otus-13_8-release/taxonomy/70_otu_taxonomy.txt
+parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/gg_otus-13_8-release/rep_set/97_otus.fasta -t /qiime/gg_otus-13_8-release/taxonomy/97_otu_taxonomy.txt
 
 
 
@@ -124,24 +124,30 @@ parallel_assign_taxonomy_blast.py -i rep_set.screened.fna -o taxonomy -r /qiime/
 
 
 ```bash
-make_otu_table.py -i estudio.otu -t taxonomy/taxonomy_repset_tax_assignments.txt -o estudio.biom 
+make_otu_table.py -i estudio.otu -t taxonomy/rep_set.screened_tax_assignments.txt -o estudio.biom 
 
 #Quitar los OTUs sin hits de 16S y singletons
+
 filter_otus_from_otu_table.py -i estudio.biom -e ids_REMOVE_biom.txt -o estudio_screened.biom -n2 ; mv estudio_screened.biom estudio.biom
+
 
 
 
 #alinear secuencias para identificar químeras:
 parallel_align_seqs_pynast.py -i rep_set.screened.fna -o chimalign -X estudio
 
-#identificar quimeras
-parallel_identify_chimeric_seqs.py -i chimalign/estudio.repset_aligned.fasta -r /qiime/gg_otus-13_8-release/rep_set_aligned/85_otus.fasta -o estudio.chimera.txt
+#Método rápido (BLAST) para eliminar quimeras:
+parallel_identify_chimeric_seqs.py -m blast_fragments -i rep_set.screened.fna -a chimalign/rep_set.screened_aligned.fasta -o estudio.chimera.txt -X chimerablast --id_to_taxonomy_fp /qiime/gg_otus-13_8-release/taxonomy/97_otu_taxonomy.txt -r /qiime/gg_otus-13_8-release/rep_set/97_otus.fasta
+
+
+#identificar quimeras (ChimeraSlayer; lento)
+parallel_identify_chimeric_seqs.py -i chimalign/rep_set.screened_aligned.fasta -r /qiime/gg_otus-13_8-release/rep_set_aligned/85_otus.fasta -o estudio.chimera.txt
 awk '{print $1}' estudio.chimera.txt >ids_CHIMERA.txt
 
 
 #eliminar quimeras del archivo biom
 
-filter_otus_from_otu_table.py -i estudio.biom -e ids_CHIMERA.txt -o estudio_chimera.biom; mv estudio_chimera.biom estudio.biom
+filter_otus_from_otu_table.py -i estudio.biom -e estudio.chimera.txt -o estudio_chimera.biom; mv estudio_chimera.biom estudio.biom
 
 
 
