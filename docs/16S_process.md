@@ -29,7 +29,7 @@ Muestra | Cantidad de READS | Longitud promedio reads | # Secuencias Pareadas Un
 ```bash
 ls *.fastq.gz | perl -pe 's/_R.*.fastq.gz//g' | sort | uniq >lista #genera la lista
 ln -s scritps/assemblyCASPER.sh assemblyCASPER.sh #link simbólico al script de ensamblado por PANDASEQ
-bash assemblyPANDA.sh NOMBRE_TRABAJO #se corre el script que genera los trabajos de ensamble usando PANDASEQ (requerimento previo)
+bash assemblyCASPER.sh NOMBRE_TRABAJO #se corre el script que genera los trabajos de ensamble usando PANDASEQ (requerimento previo)
 for N in `ls *.scr`; do qsub $N; done # se mandan al cluster los trabajos de ensamblado
 ```
 
