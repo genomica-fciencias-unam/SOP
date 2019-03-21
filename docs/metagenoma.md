@@ -185,7 +185,8 @@ echo "#!/bin/bash" >$*.$COUNT.scr
 echo "#$ -cwd" >>$*.$COUNT.scr
 echo "#$ -j y" >>$*.$COUNT.scr
 echo "#$ -S /bin/bash" >>$*.$COUNT.scr
-echo /home/cristobal/binc/samtools-1.2/samtools view -u -f4 "$SEQS/$FAA".sam -o "$SEQS/$FAA"_ump.sam >> $*.$COUNT.scr
+echo /home/cristobal/binc/samtools-1.2/samtools view -u -f 12 -F 256 "$SEQS/$FAA".sam "|" /home/cristobal/binc/samtools-1.2/samtools bam2fq - ">" "$FAA"_ump.fastq  >> $*.$COUNT
+.scr
 chmod +x *.scr; done
 ```
 6. Segundo ensamble de _reads_ no mapeados con _Velvet_ con cobertura 2X
