@@ -148,8 +148,11 @@ echo "#!/bin/bash" >$*.$COUNT.scr
 echo "$BIN/megahit/megahit -m 24000000000 -t 40 -1 $SEQS/$FAA"_paired_R1.fastq" -2 $SEQ
 S/$FAA"_paired_R2.fastq" -o $OUT/$FAA.megahit_result" >>$*.$COUNT.scr
 ```
-3. Estadísticas de ensamblado
-
+3. Estadísticas de ensamblado. 
+Se puede realizar para los contigs largos, cortos o el ensamble híbrido (contigs cortos + contigs largos):
+```
+python /home/miguel/mbin/quast-5.0.0/quast.py *contigs.fasta
+```
 4. Mapeo de _reads_ crudos _vs contigs_, se utiliza bbmap
 ```
 #!/bin/bash
