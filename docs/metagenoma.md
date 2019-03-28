@@ -169,7 +169,7 @@ echo "#!/bin/bash" >$*.$COUNT.scr
 echo "#$ -cwd" >>$*.$COUNT.scr
 echo "#$ -j y" >>$*.$COUNT.scr
 echo "#$ -S /bin/bash" >>$*.$COUNT.scr
-echo "$BIN"/bbwrap.sh ref="$CONT/$FAA"_contigs.fa in="$SEQS/
+echo "$BIN"/bbwrap.sh ref="$CONT/$FAA"_contigs.fa in1="$SEQS/
 $FAA"_paired_R1.fastq in2="$SEQS/$FAA"_paired_R2.fastq build="$COUNT" out="$SEQS/$FAA".sam kfil
 ter=22 subfilter=15 maxindel=80 >> $*.$COUNT.scr
 chmod +x *.scr; done
