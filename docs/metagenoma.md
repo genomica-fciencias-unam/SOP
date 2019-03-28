@@ -192,6 +192,10 @@ echo /home/cristobal/binc/samtools-1.2/samtools view -u -f 12 -F 256 "$SEQS/$FAA
 .scr
 chmod +x *.scr; done
 ```
+*Para incorporar las secuencias no pareadas al ensamble de Velvet, se concatenan en un archivo:
+```
+for FAA in `ls *_unpaired_R1.fastq | perl -pe 's/\_.*//g' | sort | uniq`; do cat "$FAA"_unpaired_R1.fastq "$FAA"_unpaired_R2.fastq > "$FAA"_all_unpaired.fastq; done
+```
 6. Segundo ensamble de _reads_ no mapeados con _Velvet_ con cobertura 2X
 ```
 #!/bin/bash
