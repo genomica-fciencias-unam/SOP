@@ -234,6 +234,7 @@ for i in `cat muestras`; do echo " perl /home/hugo/scripts/header.fasta.numbers.
 #!/bin/bash
 
 SEQS=/home/hugo/spades_assembly_2019/prediccion_genes
+
 PROD=/home/miguel/mbin/Prodigal-GoogleImport/prodigal
 
 COUNT=0
