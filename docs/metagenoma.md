@@ -216,9 +216,152 @@ echo "$BIN/velvetg $SEQS/$FAA"_assemblyVelvet -exp_cov 2 -ins_length 350 -min_co
 chmod +x *.scr; done
 ```
 7. Mapeo de _reads_ crudos _vs_ ensamblado con _Velvet_
-8. Descartar contigs de <100 pb; unir el ensamble del paso 2 contra el ensamble de 6
+8. Unir el ensamble del paso 2 contra el ensamble de 6; Descartar contigs de <100 pb; renombrar los contigs por muestra
+  8.1 Concatenar los contigs de las muestras 
+```
+ for i in `cat muestras`; do echo "cat "$i"_spades_contigs.fasta "$i"_velv_contigs.fasta >"$i"_SVcontigs.fasta"| sh; done
+```
+  8.2 Usar el script remove_small.pl para filtrar por longitud.
+``` 
+for i in `cat muestras`; do echo "perl /home/hugo/scripts/remove_small.pl 100 "$i"_SVcontigs.fasta >"$i"_SVc_lf.fasta" | sh; done
+
+#!/usr/bin/perl
+# Script Remove Small. Ejecución: ./remove_small.pl file.fasta #pb
+use strict;
+use warnings;
+my $minlen = shift or die "Error: `minlen` parameter not provided\n";
+{
+local $/=">";
+while(<>) {
+chomp;
+next unless /\w/;
+s/>$//gs;
+my @chunk = split /\n/;
+my $header = shift @chunk;
+my $seqlen = length join "", @chunk;
+print ">$_" if($seqlen >= $minlen);
+}
+local $/="\n";
+}
+
+```
+  8.3 Renombrar secuencias de acuerdo al identificador de la muestra con el script header.fasta.numbers.pl
+```
+for i in `cat muestras`; do echo " perl /home/hugo/scripts/header.fasta.numbers.pl "$i" "$i"_SVclf.fasta"| sh; done
+
+#!/usr/bin/perl
+# Script: header.fasta.numbers.pl
+# este script cambia cada uno de los identificadores de un archivo fasta a >prefix_# donde prefix es el
+# primer argumento del script y # es una numeración de cada una de las secuencias que componen el archivo el segundo argumento es el nombre del archivo fasta a renombrar.
+# este script es útil si se quiere usar QIIME en archivos fasta desmultiplexados o individuales. 
+# uso: ./header.fasta.numbers.pl prefix nombre_del_archivo.fasta
+# Luis David Alcaraz 2013-04-11
+
+my $prefix = $ARGV[0]; chomp $prefix; 
+my $f =  1;
+
+my $fasta_file = $ARGV [1]; chomp $fasta_file;
+
+my $fh;
+open($fh, $fasta_file) or die "can't open $fasta_file: $!\n";
+open(OUT, ">$fasta_file.numbered.fas") || die "can't open $fasta_file.numbered.fas\n";
+
+my %sequence_data;
+while (read_fasta_sequence($fh, \%sequence_data)) {
+   print OUT ">$sequence_data{header}\n$sequence_data{seq}\n";
+}
+
+close $fh; 
+close OUT;
+
+sub read_fasta_sequence {
+   my ($fh, $seq_info) = @_;
+
+   $seq_info->{seq} = undef; # clear out previous sequence
+
+   # put the header into place
+   $seq_info->{header} = $seq_info->{next_header} if $seq_info->{next_header};
+
+   my $file_not_empty = 0; 
+   while (<$fh>) {
+      $file_not_empty = 1;
+      next if /^\s*$/;  # skip blank lines
+      chomp;    
+
+      if (/^>/) { # fasta header line
+         my $h = $_;    
+         $h =~ s/>/$prefix\_$f\ /; 
+	 $f++; 
+         if ($seq_info->{header}) {
+            $seq_info->{next_header} = $h;
+            return $seq_info;
+	   
+         }              
+         else { # first time through only
+            $seq_info->{header} = $h;
+         }              
+      }         
+      else {    
+         s/\s+//;  # remove any white space
+         s/\n\n/\n/; 
+         $seq_info->{seq} .= $_;
+      }         
+   }    
+
+   if ($file_not_empty) {
+      return $seq_info;
+   }    
+   else {
+      # clean everything up
+      $seq_info->{header} = $seq_info->{seq} = $seq_info->{next_header} = undef;
+
+      return;   
+   }    
+}
+
+```
 9. Predicción de ORFs con _Prodigal_
+```
+#!/bin/bash
+
+SEQS=/home/hugo/spades_assembly_2019/prediccion_genes
+PROD=/home/miguel/mbin/Prodigal-GoogleImport/prodigal
+
+COUNT=0
+for FAA in `cat muestras`
+do
+let COUNT=COUNT+1
+echo "#!/bin/bash" >$*.$COUNT.scr
+echo "#$ -cwd" >>$*.$COUNT.scr
+echo "#$ -j y" >>$*.$COUNT.scr
+echo "#$ -S /bin/bash" >>$*.$COUNT.scr
+
+echo ""$PROD"  -i "$SEQS/$FAA"_SVc_lf.fasta.numbered.fas -a "$SEQS/$FAA"_SVclf.faa -d "$SEQS/$FAA"_SVclf.genes -p meta -o "$SEQS/$FAA".prodigal" >> $*.$COUNT.scr
+chmod +x *.scr
+done
+```
 10. Anotación de los archivos de proteínas predichas de _Prodigal_ contra M5NR usando el API del RAST
+```
+#!/bin/bash
+#Forma de uso: bash nombre_script.sh <nombre-del-trabajo>
+
+SEQS=/home/hugo/spades_assembly_2019/prediccion_genes
+SALIDA=/home/hugo/spades_assembly_2019/prediccion_genes/anotacion_m5
+BIN2=/home/miguel/mbin/diamond
+
+COUNT=0
+for FAA in `ls *.faa`
+do
+let COUNT=COUNT+1
+echo "#!/bin/bash" >$*.$COUNT.scr
+echo "#$ -cwd" >>$*.$COUNT.scr
+echo "#$ -j y" >>$*.$COUNT.scr
+echo "#$ -S /bin/bash" >>$*.$COUNT.scr
+echo "#$ -l h_vmem=12G" >>$*.$COUNT.scr
+
+echo  ""$BIN2" blastp -d /databases/m5nr16may17/m5nr.dmnd   -q "$SEQS/$FAA" -f 6 -e 1e-10 -k 10 -p 1 -o "$SALIDA/$FAA".dout" >>$*.$COUNT.scr
+done
+```
 11. Generar tabla de anotación de AfOTU (_annotated function OTU_).
 12. Separar ORFs sin _hit_ al M5NR y generar un multifasta.
 13. Clustering al 70% de las proteínas predichas sin hit al M5NR. Estos serán dominados como PUFO _(protein family of unknown origin)_
