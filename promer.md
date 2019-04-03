@@ -4,7 +4,7 @@ Para definir el número de núcleos a usar hay que usar la variable "OMP_NUM_THR
 
 Ejemplo de script a correr: 
 
-script "promer"
+script "promer.scr"
 ```
 #!/bin/bash
 #$ -cwd
@@ -18,5 +18,5 @@ export OMP_NUM_THREADS=30
 Ejemplo de llamado al SGE:
 
 ```
-qsub -pe completenode 30 -l h_vmem=150G promer
+qsub -pe completenode 30 -l h_vmem=150G promer.scr
 ```
