@@ -156,3 +156,14 @@ biom convert --to-tsv -i estudio.biom -o estudio.biom.tsv --table-type "Taxon ta
 
 
 ```
+
+##Generar arbol filogenético
+```
+#En cuallicua es muy importante usar la cola paralela y definir ahí y en export OMP_NUM_THREADS el número de cores a usar
+qsub -pe completenode 40 -N arbolote -b y -j y -cwd -V "export OMP_NUM_THREADS=40; FastTreeMP -nt -gtr chimalign/rep_set.screened_aligned.fasta >tree_daniela.nwk"
+
+
+#En deep-thought
+qsub -pe completenode 4 -N arbolote -b y -j y -cwd -V " FastTreeMP -nt -gtr chimalign/rep_set.screened_aligned.fasta >tree_daniela.nwk"
+```
+
