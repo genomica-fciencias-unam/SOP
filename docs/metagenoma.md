@@ -2,11 +2,7 @@ Para los metagenomas:
 
 Los pasos generales son: 
 
-<<<<<<< HEAD
-0. Mapeo de secuencias contra el hospedero (Bowtie2)
-```
-comando del mal
-=======
+
 0. Mapeo de secuencias contra el hospedero utilizando Bowtie2:
 
 a) Se selecciona un genoma de referencia para realizar el filtrado, es necesario formatearlo:
