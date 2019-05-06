@@ -16,7 +16,7 @@ grep -v -f single all  > align #genera la lista de archivos a alinear
 for L in `cat single`; do echo "ln -s $L $L.aln"; done | bash
 
 #Alinea las secuencias (en máquina sencilla):
-for A in `cat align`; do echo "muscle -in $A -out $A.aln"; done | bash
+#for A in `cat align`; do echo "muscle -in $A -out $A.aln"; done | bash
 
 #EN deep-thought / cuallicua (manda 1 alineamiento por procesador)
 for A in `cat align`; do qsub -N NOMBRE_TRABAJO -b y -j y -cwd -V "muscle -in $A -out $A.aln"; done 
